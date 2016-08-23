@@ -62,7 +62,7 @@ public class MleImageCarrier
      * the specified parameters are <b>null</b>. It will also be
      * thrown if an error occurs while setting the property.
      */
-    public static final boolean set(MleRole role,MleMediaRef reference)
+    public static final boolean set(MleRole role, MleMediaRef reference)
         throws MleRuntimeException
     {
         boolean retValue = false;
@@ -71,6 +71,9 @@ public class MleImageCarrier
             throw new MleRuntimeException("MleImageCarrier: Invalid input arguments.");
         
         MleImageRole imgRole = (MleImageRole) role;
+
+        // Load media reference from Digital Playprint/Workprint.
+        //MleImageMediaRef imgReference = (MleImageMediaRef)mlLoadMediaRef(reference, null);
         MleImageMediaRef imgReference = (MleImageMediaRef) reference;
         
         // Read the image using the Media Reference.

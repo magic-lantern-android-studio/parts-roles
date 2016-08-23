@@ -4,6 +4,7 @@ import com.wizzer.mle.runtime.core.MleRole;
 import com.wizzer.mle.parts.j3d.props.I3dNodeTypeProperty;
 import com.wizzer.mle.parts.j3d.roles.I3dRole;
 import com.wizzer.mle.parts.j3d.min3d.Node;
+import com.wizzer.mle.runtime.core.MleRuntimeException;
 
 /**
  * @brief 3d Node Type property carrier.
@@ -15,6 +16,7 @@ import com.wizzer.mle.parts.j3d.min3d.Node;
 public class Mle3dNodeTypeCarrier
 {
     public static boolean set(MleRole role, I3dNodeTypeProperty.NodeType nodeType)
+        throws MleRuntimeException
     {
         Node root = null;
         Node parent = null;
@@ -24,7 +26,7 @@ public class Mle3dNodeTypeCarrier
         if ((role != null) && (role instanceof Mle3dRole)) {
             root = ((Mle3dRole) role).getRoot();
         } else {
-            return result;
+            throw new MleRuntimeException("Mle3dNodeTypeCarrier: Invalid input arguments.");
         }
 
         if (root != null)
@@ -119,6 +121,7 @@ public class Mle3dNodeTypeCarrier
     // ToDo: Not very Java like; get should probably return NodeType. But this might break
     // Carrier architecture - need to investigate.
     public static boolean get(MleRole role, I3dNodeTypeProperty.NodeType nodeType[])
+        throws MleRuntimeException
     {
         Node root = null;
         boolean result = false;
@@ -126,7 +129,7 @@ public class Mle3dNodeTypeCarrier
         if ((role != null) && (role instanceof Mle3dRole)) {
             root = ((Mle3dRole) role).getRoot();
         } else {
-            return result;
+            throw new MleRuntimeException("Mle3dNodeTpeCarrier: Invalid input arguments.");
         }
 
         if (root != null)
