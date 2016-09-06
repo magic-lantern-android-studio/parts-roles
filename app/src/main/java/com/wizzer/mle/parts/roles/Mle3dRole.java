@@ -33,8 +33,8 @@ public class Mle3dRole extends MleRole implements I3dRole
     @Override
     public void init()
     {
-        // ToDo: Do we want to create a Node of type m_nodeType if it is something other than
-        // NONE?
+        // Create a Node of type m_nodeType.
+        m_root = new Node(m_nodeType, this);
     }
 
     @Override
