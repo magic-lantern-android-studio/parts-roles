@@ -95,4 +95,20 @@ public class Mle3dRole extends MleRole implements I3dRole
     public void setRoot(Node root) { m_root = root; }
 
     public Node getRoot() { return m_root; }
+
+    public void render()
+    {
+        // Render the associated Node.
+        m_root.render();
+
+        // Render children nodes
+        for (int i = 0; i < numChildren(); i++)
+        {
+            MleRole child = getChildAt(i);
+            if (child instanceof Mle3dRole )
+                ((Mle3dRole) child).render();
+            // ToDo: The scene graph must be comprised only of Mle3dRoles. In the future,
+            // we may need to handle other rendering strategies.
+        }
+    }
 }
