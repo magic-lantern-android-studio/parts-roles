@@ -96,10 +96,31 @@ public class Mle3dRole extends MleRole implements I3dRole
 
     public Node getRoot() { return m_root; }
 
+    private float[] m_viewMatrix = new float[16];
+    private float[] m_projectionMatrix = new float[16];
+
+    public void setViewMatrix(float[] matrix)
+    {
+        for (int i = 0;  i < 16; i++)
+            m_viewMatrix[i] = matrix[i];
+    }
+
+    public float[] getViewMatrix()
+    { return m_viewMatrix; }
+
+    public void setProjectionMatrix(float[] matrix)
+    {
+        for (int i = 0;  i < 16; i++)
+            m_projectionMatrix[i] = matrix[i];
+    }
+
+    public float[] getProjectionMatrix()
+    { return m_projectionMatrix; }
+
     public void render()
     {
         // Render the associated Node.
-        m_root.render();
+        m_root.render(m_viewMatrix, m_projectionMatrix);
 
         // Render children nodes
         for (int i = 0; i < numChildren(); i++)
