@@ -59,6 +59,7 @@ public class Mle3dModelCarrier
                     // Read the model using the Media Reference.
                     Model model = geometryMedia.read();
                     root.setAsModel(model, (I3dRole) role);
+                    root.init();
                     retValue = true;
                 }
             } else {

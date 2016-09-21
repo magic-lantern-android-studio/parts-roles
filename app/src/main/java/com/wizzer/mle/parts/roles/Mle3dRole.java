@@ -7,6 +7,7 @@ import com.wizzer.mle.runtime.core.MleRole;
 import com.wizzer.mle.parts.j3d.roles.I3dRole;
 import com.wizzer.mle.parts.j3d.props.I3dNodeTypeProperty;
 import com.wizzer.mle.parts.j3d.min3d.Node;
+import com.wizzer.mle.runtime.core.MleRuntimeException;
 
 /**
  * Created by msm on 8/16/16.
@@ -117,12 +118,29 @@ public class Mle3dRole extends MleRole implements I3dRole
     public float[] getProjectionMatrix()
     { return m_projectionMatrix; }
 
+    public void initRender()
+        throws MleRuntimeException
+    {
+        // Initialize the associated Node.
+        m_root.initRender();
+
+        // Initialize the children nodes.
+        for (int i = 0; i < numChildren(); i++)
+        {
+            MleRole child = getChildAt(i);
+            if (child instanceof Mle3dRole )
+                ((Mle3dRole) child).initRender();
+            // ToDo: The scene graph must be comprised only of Mle3dRoles. In the future,
+            // we may need to handle other rendering strategies.
+        }
+    }
+
     public void render()
     {
         // Render the associated Node.
         m_root.render(m_viewMatrix, m_projectionMatrix);
 
-        // Render children nodes
+        // Render children nodes.
         for (int i = 0; i < numChildren(); i++)
         {
             MleRole child = getChildAt(i);
