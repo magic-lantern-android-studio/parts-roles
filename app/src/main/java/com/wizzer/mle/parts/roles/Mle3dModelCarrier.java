@@ -2,6 +2,7 @@ package com.wizzer.mle.parts.roles;
 
 import com.wizzer.mle.parts.j3d.props.I3dNodeTypeProperty;
 import com.wizzer.mle.parts.j3d.roles.I3dRole;
+import com.wizzer.mle.runtime.core.IMleRole;
 import com.wizzer.mle.runtime.core.MleMediaRef;
 import com.wizzer.mle.runtime.core.MleRole;
 import com.wizzer.mle.runtime.core.MleRuntimeException;
@@ -33,7 +34,7 @@ public class Mle3dModelCarrier
      * the specified parameters are <b>null</b>. It will also be
      * thrown if an error occurs while setting the property.
      */
-    public static final boolean set(MleRole role, MleMediaRef reference)
+    public static final boolean set(IMleRole role, MleMediaRef reference)
             throws MleRuntimeException
 
     {

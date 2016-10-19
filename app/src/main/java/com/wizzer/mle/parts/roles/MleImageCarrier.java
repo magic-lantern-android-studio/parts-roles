@@ -32,6 +32,7 @@ package com.wizzer.mle.parts.roles;
 import android.graphics.Bitmap;
 
 // Import Magic Lantern Runtime Engine classes.
+import com.wizzer.mle.runtime.core.IMleRole;
 import com.wizzer.mle.runtime.core.MleRole;
 import com.wizzer.mle.runtime.core.MleMediaRef;
 import com.wizzer.mle.runtime.core.MleRuntimeException;
@@ -62,15 +63,19 @@ public class MleImageCarrier
      * the specified parameters are <b>null</b>. It will also be
      * thrown if an error occurs while setting the property.
      */
-    public static final boolean set(MleRole role, MleMediaRef reference)
+    public static final boolean set(IMleRole role, MleMediaRef reference)
         throws MleRuntimeException
     {
         boolean retValue = false;
         
         if ((role == null) || (reference == null))
             throw new MleRuntimeException("MleImageCarrier: Invalid input arguments.");
-        
-        MleImageRole imgRole = (MleImageRole) role;
+
+        MleImageRole imgRole;
+        if (role instanceof MleImageRole)
+            imgRole = (MleImageRole) role;
+        else
+            throw new MleRuntimeException("MleImageCarrier: Role must be MleImageRole.");
 
         // Load media reference from Digital Playprint/Workprint.
         //MleImageMediaRef imgReference = (MleImageMediaRef)mlLoadMediaRef(reference, null);
@@ -91,10 +96,12 @@ public class MleImageCarrier
     
     /**
      * Get the width of the image.
+     *
+     * @param role A reference to a <code>MleImageRole</code>.
      * 
      * @return An integer value is returned.
      */
-    public static int getWidth(MleRole role)
+    public static int getWidth(IMleRole role)
     {
         MleImageRole imgRole = (MleImageRole) role;
         float[] min = new float[2];
@@ -107,10 +114,12 @@ public class MleImageCarrier
 
     /**
      * Get the height of the image.
-     * 
+     *
+     * @param role A reference to a <code>MleImageRole</code>.
+     *
      * @return An integer value is returned.
      */
-    public static int getHeight(MleRole role)
+    public static int getHeight(IMleRole role)
     {
         MleImageRole imgRole = (MleImageRole) role;
         float[] min = new float[2];

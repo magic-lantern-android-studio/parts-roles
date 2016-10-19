@@ -2,6 +2,8 @@ package com.wizzer.mle.parts.roles;
 
 import java.util.Vector;
 
+import com.wizzer.mle.parts.j3d.sets.I3dSet;
+import com.wizzer.mle.runtime.core.IMleRole;
 import com.wizzer.mle.runtime.core.MleActor;
 import com.wizzer.mle.runtime.core.MleRole;
 import com.wizzer.mle.parts.j3d.roles.I3dRole;
@@ -17,7 +19,7 @@ public class Mle3dRole extends MleRole implements I3dRole
     protected I3dNodeTypeProperty.NodeType m_nodeType;
     protected Node m_root;
 
-    private Vector<MleRole> m_children;
+    private Vector<IMleRole> m_children;
 
     public Mle3dRole(MleActor actor, I3dNodeTypeProperty.NodeType nodeType)
     {
@@ -60,21 +62,21 @@ public class Mle3dRole extends MleRole implements I3dRole
     }
 
     @Override
-    public void addChild(MleRole child)
+    public void addChild(IMleRole child)
     {
         if ((child != null) && (child instanceof Mle3dRole))
             m_children.add(child);
         // ToDo: what happens if child is not a 3d Role?
     }
 
-    public void removeChild(MleRole child)
+    public void removeChild(IMleRole child)
     {
         if ((child != null) && (child instanceof Mle3dRole)) {
             m_children.remove(child);
         }
     }
 
-    public MleRole getChildAt(int i)
+    public IMleRole getChildAt(int i)
     {
         return m_children.get(i);
     }
@@ -118,24 +120,29 @@ public class Mle3dRole extends MleRole implements I3dRole
     public float[] getProjectionMatrix()
     { return m_projectionMatrix; }
 
+    @Override
     public void initRender()
         throws MleRuntimeException
     {
+        setViewMatrix(((I3dSet)m_set).getViewMatrix());
+        setProjectionMatrix(((I3dSet)m_set).getProjectionMatrix());
+
         // Initialize the associated Node.
         m_root.initRender();
 
         // Initialize the children nodes.
         for (int i = 0; i < numChildren(); i++)
         {
-            MleRole child = getChildAt(i);
-            if (child instanceof Mle3dRole )
-                ((Mle3dRole) child).initRender();
+            IMleRole child = getChildAt(i);
+            child.initRender();
             // ToDo: The scene graph must be comprised only of Mle3dRoles. In the future,
             // we may need to handle other rendering strategies.
         }
     }
 
+    @Override
     public void render()
+        throws MleRuntimeException
     {
         // Render the associated Node.
         m_root.render(m_viewMatrix, m_projectionMatrix);
@@ -143,9 +150,8 @@ public class Mle3dRole extends MleRole implements I3dRole
         // Render children nodes.
         for (int i = 0; i < numChildren(); i++)
         {
-            MleRole child = getChildAt(i);
-            if (child instanceof Mle3dRole )
-                ((Mle3dRole) child).render();
+            IMleRole child = getChildAt(i);
+            child.render();
             // ToDo: The scene graph must be comprised only of Mle3dRoles. In the future,
             // we may need to handle other rendering strategies.
         }

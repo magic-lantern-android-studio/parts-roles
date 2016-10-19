@@ -4,6 +4,7 @@ import com.wizzer.mle.math.MlTransform;
 import com.wizzer.mle.math.MlVector3;
 import com.wizzer.mle.parts.j3d.min3d.Node;
 import com.wizzer.mle.parts.j3d.props.I3dNodeTypeProperty;
+import com.wizzer.mle.runtime.core.IMleRole;
 import com.wizzer.mle.runtime.core.MleRole;
 import com.wizzer.mle.runtime.core.MleRuntimeException;
 import com.wizzer.mle.min3d.vos.Number3d;
@@ -31,7 +32,7 @@ public class Mle3dTransformCarrier
      * the specified parameters are <b>null</b>. It will also be
      * thrown if an error occurs while setting the property.
      */
-    public static final boolean set(MleRole role, MlTransform transform)
+    public static final boolean set(IMleRole role, MlTransform transform)
             throws MleRuntimeException
 
     {
@@ -85,7 +86,7 @@ public class Mle3dTransformCarrier
      * the specified parameters are <b>null</b>. It will also be
      * thrown if an error occurs while setting the property.
      */
-    public static final boolean get(MleRole role, MlTransform transform)
+    public static final boolean get(IMleRole role, MlTransform transform)
             throws MleRuntimeException
     {
         Node root = null;

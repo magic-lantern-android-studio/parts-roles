@@ -1,5 +1,6 @@
 package com.wizzer.mle.parts.roles;
 
+import com.wizzer.mle.runtime.core.IMleRole;
 import com.wizzer.mle.runtime.core.MleRole;
 import com.wizzer.mle.parts.j3d.props.I3dNodeTypeProperty;
 import com.wizzer.mle.parts.j3d.roles.I3dRole;
@@ -15,7 +16,7 @@ import com.wizzer.mle.runtime.core.MleRuntimeException;
  */
 public class Mle3dNodeTypeCarrier
 {
-    public static boolean set(MleRole role, I3dNodeTypeProperty.NodeType nodeType)
+    public static boolean set(IMleRole role, I3dNodeTypeProperty.NodeType nodeType)
         throws MleRuntimeException
     {
         Node root = null;
