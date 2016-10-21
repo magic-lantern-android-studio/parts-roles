@@ -63,6 +63,8 @@ public class Mle3dTransformCarrier
                     position.setAll(tTranslation[0], tTranslation[1], tTranslation[2]);
                     rotation.setAll(tRotation[0], tRotation[1], tRotation[2]);
                     scale.setAll(tScale[0], tScale[1], tScale[2]);
+
+                    retValue = true;
                 }
             } else {
                 throw new MleRuntimeException("Mle3dTransformCarrier: Invalid input arguments.");
@@ -101,7 +103,7 @@ public class Mle3dTransformCarrier
         if (root != null) {
             if (transform != null) {
                 if (root.getNodeType() == I3dNodeTypeProperty.NodeType.TRANSFORM) {
-                    // Set the transform from the Node.
+                    // Get the transform from the Node.
                     Number3d position = root.position();
                     Number3d rotation = root.rotation();
                     Number3d scale = root.scale();
@@ -110,6 +112,8 @@ public class Mle3dTransformCarrier
                     MlVector3 tRotation = new MlVector3(rotation.x, rotation.y, rotation.z);
                     MlVector3 tScale = new MlVector3(scale.x, scale.y, scale.z);
                     transform.setTransform(tTranslation, tRotation, tScale);
+
+                    retValue = true;
                 }
             } else {
                 throw new MleRuntimeException("Mle3dTransformCarrier: Invalid input arguments.");
