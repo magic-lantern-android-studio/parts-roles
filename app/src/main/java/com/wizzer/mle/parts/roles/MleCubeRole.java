@@ -14,6 +14,10 @@ import android.opengl.Matrix;
 import android.util.Log;
 
 // Import Magic Lantern classes.
+import com.wizzer.mle.math.MlAngle;
+import com.wizzer.mle.math.MlRotation;
+import com.wizzer.mle.math.MlTransform;
+import com.wizzer.mle.math.MlVector3;
 import com.wizzer.mle.runtime.core.IMleRole;
 import com.wizzer.mle.runtime.core.MleActor;
 import com.wizzer.mle.runtime.core.MleRole;
@@ -343,6 +347,73 @@ public class MleCubeRole extends MleRole implements I3dRole
      */
     public synchronized float[] getColor()
     { return m_color; }
+
+    @Override
+    public synchronized boolean setTransform(MlTransform transform)
+    {
+        boolean retValue;
+
+        if (transform != null) {
+            float[] translation = new float[3];
+            float[] rotation = new float[4];
+            float[] scale = new float [3];
+
+            MlVector3 t = new MlVector3();
+            MlRotation r = new MlRotation();
+            MlVector3 s = new MlVector3();
+            MlRotation so = new MlRotation();
+            transform.getTransform(t, r, s, so);
+
+            t.getValue(translation);
+            // Convert from (q0, q1, q2, q3) to (angle, x, y, z).
+            MlVector3 axis = new MlVector3();
+            float[] angleInRadians = new float[1];
+            r.getValue(axis, angleInRadians);
+            float[] a = new float[3];
+            axis.getValue(a);
+            rotation[0] = MlAngle.radiansToAngle(angleInRadians[0]);
+            rotation[1] = a[0];
+            rotation[2] = a[1];
+            rotation[3] = a[2];
+            s.getValue(scale);
+
+            this.setTranslation(translation);
+            this.setRotation(rotation);
+            this.setScale(scale);
+
+            retValue = true;
+        } else
+            retValue = false;
+
+        return retValue;
+    }
+
+    @Override
+    public synchronized boolean getTransform(MlTransform transform)
+    {
+        boolean retValue;
+
+        if (transform != null)
+        {
+            MlVector3 translation = new MlVector3();
+            MlRotation rotation = new MlRotation();
+            MlVector3 scale = new MlVector3();
+
+            translation.setValue(m_translation[0], m_translation[1], m_translation[2]);
+            // Convert from (angle, x, y, z) to (q0, q1, q2, q3).
+            MlVector3 axis = new MlVector3(m_rotation[1], m_rotation[2], m_rotation[3]);
+            float angleInRadians = MlAngle.angleToRadians(m_rotation[0]);
+            rotation.setValue(axis, angleInRadians);
+            scale.setValue(m_scale[0], m_scale[1], m_scale[2]);
+
+            transform.setTransform(translation, rotation, scale);
+
+            retValue = true;
+        } else
+            retValue = false;
+
+        return retValue;
+    }
 
     /**
      * Retrieve the vertex shader for the cube.

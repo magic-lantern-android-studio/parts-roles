@@ -4,6 +4,7 @@ import com.wizzer.mle.math.MlTransform;
 import com.wizzer.mle.math.MlVector3;
 import com.wizzer.mle.parts.j3d.min3d.Node;
 import com.wizzer.mle.parts.j3d.props.I3dNodeTypeProperty;
+import com.wizzer.mle.parts.j3d.roles.I3dRole;
 import com.wizzer.mle.runtime.core.IMleRole;
 import com.wizzer.mle.runtime.core.MleRole;
 import com.wizzer.mle.runtime.core.MleRuntimeException;
@@ -36,40 +37,16 @@ public class Mle3dTransformCarrier
             throws MleRuntimeException
 
     {
-        Node root = null;
-        boolean retValue = false;
+        I3dRole role3d;
+        boolean retValue;
 
-        if ((role != null) && (role instanceof Mle3dRole)) {
-            root = ((Mle3dRole) role).getRoot();
+        if ((role != null) && (role instanceof I3dRole)) {
+            role3d = (I3dRole) role;
         } else {
             throw new MleRuntimeException("Mle3dTransformCarrier: Invalid input arguments.");
         }
 
-        if (root != null) {
-            if (transform != null) {
-                if (root.getNodeType() == I3dNodeTypeProperty.NodeType.TRANSFORM) {
-                    // Set the transform on the Node.
-                    Number3d position = root.position();
-                    Number3d rotation = root.rotation();
-                    Number3d scale = root.scale();
-
-                    float[] tTranslation = new float[3];
-                    transform.getTranslation(tTranslation);
-                    float[] tRotation = new float[3];
-                    transform.getRotation(tRotation);
-                    float[] tScale = new float[3];
-                    transform.getScale(tScale);
-
-                    position.setAll(tTranslation[0], tTranslation[1], tTranslation[2]);
-                    rotation.setAll(tRotation[0], tRotation[1], tRotation[2]);
-                    scale.setAll(tScale[0], tScale[1], tScale[2]);
-
-                    retValue = true;
-                }
-            } else {
-                throw new MleRuntimeException("Mle3dTransformCarrier: Invalid input arguments.");
-            }
-        }
+        retValue = role3d.setTransform(transform);
 
         return retValue;
     }
@@ -91,34 +68,16 @@ public class Mle3dTransformCarrier
     public static final boolean get(IMleRole role, MlTransform transform)
             throws MleRuntimeException
     {
-        Node root = null;
-        boolean retValue = false;
+        I3dRole role3d;
+        boolean retValue;
 
-        if ((role != null) && (role instanceof Mle3dRole)) {
-            root = ((Mle3dRole) role).getRoot();
+        if ((role != null) && (role instanceof I3dRole)) {
+            role3d = (I3dRole) role;
         } else {
             throw new MleRuntimeException("Mle3dTransformCarrier: Invalid input arguments.");
         }
 
-        if (root != null) {
-            if (transform != null) {
-                if (root.getNodeType() == I3dNodeTypeProperty.NodeType.TRANSFORM) {
-                    // Get the transform from the Node.
-                    Number3d position = root.position();
-                    Number3d rotation = root.rotation();
-                    Number3d scale = root.scale();
-
-                    MlVector3 tTranslation = new MlVector3(position.x, position.y, position.z);
-                    MlVector3 tRotation = new MlVector3(rotation.x, rotation.y, rotation.z);
-                    MlVector3 tScale = new MlVector3(scale.x, scale.y, scale.z);
-                    transform.setTransform(tTranslation, tRotation, tScale);
-
-                    retValue = true;
-                }
-            } else {
-                throw new MleRuntimeException("Mle3dTransformCarrier: Invalid input arguments.");
-            }
-        }
+        retValue = role3d.getTransform(transform);
 
         return retValue;
     }

@@ -2,6 +2,9 @@ package com.wizzer.mle.parts.roles;
 
 import java.util.Vector;
 
+import com.wizzer.mle.math.MlTransform;
+import com.wizzer.mle.math.MlVector3;
+import com.wizzer.mle.min3d.vos.Number3d;
 import com.wizzer.mle.parts.j3d.sets.I3dSet;
 import com.wizzer.mle.runtime.core.IMleRole;
 import com.wizzer.mle.runtime.core.MleActor;
@@ -155,5 +158,64 @@ public class Mle3dRole extends MleRole implements I3dRole
             // ToDo: The scene graph must be comprised only of Mle3dRoles. In the future,
             // we may need to handle other rendering strategies.
         }
+    }
+
+    @Override
+    public boolean setTransform(MlTransform transform)
+    {
+        boolean retValue = false;
+
+        if ((m_root != null) && (transform != null))
+        {
+            // XXX - limiting to TRANSFORM? This is where model may be breaking!
+            if (m_root.getNodeType() == I3dNodeTypeProperty.NodeType.TRANSFORM)
+            {
+                // Set the transform on the Node.
+                Number3d position = m_root.position();
+                Number3d rotation = m_root.rotation();
+                Number3d scale = m_root.scale();
+
+                float[] tTranslation = new float[3];
+                transform.getTranslation(tTranslation);
+                float[] tRotation = new float[3];
+                transform.getRotation(tRotation);
+                float[] tScale = new float[3];
+                transform.getScale(tScale);
+
+                position.setAll(tTranslation[0], tTranslation[1], tTranslation[2]);
+                rotation.setAll(tRotation[0], tRotation[1], tRotation[2]);
+                scale.setAll(tScale[0], tScale[1], tScale[2]);
+
+                retValue = true;
+            }
+        }
+
+        return retValue;
+    }
+
+    @Override
+    public boolean getTransform(MlTransform transform)
+    {
+        boolean retValue = false;
+
+        if ((m_root != null) && (transform != null))
+        {
+            if (m_root.getNodeType() == I3dNodeTypeProperty.NodeType.TRANSFORM)
+            {
+                // Get the transform from the Node.
+                Number3d position = m_root.position();
+                Number3d rotation = m_root.rotation();
+                Number3d scale = m_root.scale();
+
+                MlVector3 tTranslation = new MlVector3(position.x, position.y, position.z);
+                MlVector3 tRotation = new MlVector3(rotation.x, rotation.y, rotation.z);
+                MlVector3 tScale = new MlVector3(scale.x, scale.y, scale.z);
+                transform.setTransform(tTranslation, tRotation, tScale);
+
+                retValue = true;
+            }
+        }
+
+        return retValue;
     }
 }
