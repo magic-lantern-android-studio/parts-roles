@@ -358,25 +358,27 @@ public class MleCubeRole extends MleRole implements I3dRole
             float[] rotation = new float[4];
             float[] scale = new float [3];
 
-            MlVector3 t = new MlVector3();
+            transform.getTranslation(translation);
+
+            float angleInDegrees;
+            float[] axis = new float[3];
+
             MlRotation r = new MlRotation();
-            MlVector3 s = new MlVector3();
-            MlRotation so = new MlRotation();
-            transform.getTransform(t, r, s, so);
+            transform.getRotation(r);
+            MlVector3 a = new MlVector3();
+            float[] radians = new float[1];
+            r.getValue(a, radians);
 
-            t.getValue(translation);
-            // Convert from (q0, q1, q2, q3) to (angle, x, y, z).
-            MlVector3 axis = new MlVector3();
-            float[] angleInRadians = new float[1];
-            r.getValue(axis, angleInRadians);
-            float[] a = new float[3];
-            axis.getValue(a);
-            rotation[0] = MlAngle.radiansToAngle(angleInRadians[0]);
-            rotation[1] = a[0];
-            rotation[2] = a[1];
-            rotation[3] = a[2];
-            s.getValue(scale);
+            angleInDegrees = MlAngle.radiansToAngle(radians[0]);
+            a.getValue(axis);
 
+            rotation[0] = angleInDegrees;
+            rotation[1] = axis[0];
+            rotation[2] = axis[1];
+            rotation[3] = axis[2];
+
+            transform.getScale(scale);
+            
             this.setTranslation(translation);
             this.setRotation(rotation);
             this.setScale(scale);
@@ -400,12 +402,12 @@ public class MleCubeRole extends MleRole implements I3dRole
             MlVector3 scale = new MlVector3();
 
             translation.setValue(m_translation[0], m_translation[1], m_translation[2]);
-            // Convert from (angle, x, y, z) to (q0, q1, q2, q3).
             MlVector3 axis = new MlVector3(m_rotation[1], m_rotation[2], m_rotation[3]);
-            float angleInRadians = MlAngle.angleToRadians(m_rotation[0]);
-            rotation.setValue(axis, angleInRadians);
+            float radians = MlAngle.angleToRadians(m_rotation[0]);
+            rotation.setValue(axis, radians);
             scale.setValue(m_scale[0], m_scale[1], m_scale[2]);
 
+            //transform.makeIdentity();
             transform.setTransform(translation, rotation, scale);
 
             retValue = true;
